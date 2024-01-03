@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC,useState} from 'react'
+import {ChangeEvent, FC,useState} from 'react'
 import {ITask} from './interfaces.ts' 
 import './App.css'
 import TodoTask from './components/TodoTask.tsx'
@@ -24,9 +24,18 @@ const App:FC =() => {
   const addTask = ():void =>{
     const newTask = {taskName : task, deadline: deadline}
     setTodo([...todo,newTask])
-    console.log(todo)
+    // console.log(todo)
     setTask("")
     setDeadline(0)
+  }
+
+  //To remove completed tasks
+  const completeTask = (taskNameToDelete: string):void =>{
+    setTodo(
+      todo.filter((task) =>{
+        return task.taskName != taskNameToDelete
+      })
+    )
   }
 
   return (
@@ -50,10 +59,11 @@ const App:FC =() => {
         </div>
         <button onClick={addTask}>Add Task</button>
       </div>
+
       {/* Displays the todolist  */}
       <div className="todoList">
         {todo.map((task:ITask, key:number) =>{
-          return <TodoTask key={key} task={task} />
+          return <TodoTask key={key} task={task} completeTask={completeTask} />
         })}
       </div>
     </div>
